@@ -11,6 +11,7 @@ class LR{
 		string expression;
 		string input;
 		int counter;
+		int n;
 		string temp;
 		string token;
 	
@@ -23,26 +24,35 @@ class LR{
 			T.push("0");
 			
 			while(!T.empty()){
-				if(temp != 1){
+				if(temp == "1"){
+					cout << "Accept" << endl;
+					break;
+				}
+				else{
 					input = expression[counter];
 					pop();
 					tokenize();
 					g();
-				}
-				else{
-					cout << "Accept" << endl;
 				}
 			}
 		}
 		void pop(){
 			temp = T.top();
 			T.pop();
-			//cout << temp << endl;
+			cout << temp << endl;
 		}
 		void tokenize(){
+			n = temp.length();
 			token = temp;
-			token = token.insert(1,input);	
-			cout << token << endl;		
+			if(n == 1){
+				token = token.insert(1,input);
+				
+			}
+			else{
+				token = token.insert(2,input);
+
+			}	
+			cout << token << endl;
 		}
 		void g(){
 			// s4 state
@@ -59,7 +69,7 @@ class LR{
 				T.push("5");
 				counter++;
 			}
-			// r8 state - F -> i |i| = 1, pop x*1 items
+			// r8 state - F -> i |i| = 1, pop 2*1 items
 			else if (token == "5+"){
 				T.push("5");
 				pop();
@@ -75,7 +85,7 @@ class LR{
 				T.push("3");
 			}
 			// r6 state T -> F |F| = 1, pop 2*1 items
-			else if ((token == "3+")||(token == "3)")){
+			else if (token == "3+"){
 				T.push("3");
 				pop();
 				pop();
@@ -85,9 +95,11 @@ class LR{
 				g();				
 			}
 			else if (token == "4T"){
+				T.push("4");
+				T.push("T");
 				T.push("2");
 			}
-			// r3 state E -> T |T| = 1, pop x*1 items
+			// r3 state E -> T |T| = 1, pop 2*1 items
 			else if (token == "2+"){
 				T.push("2");
 				pop();
@@ -130,13 +142,23 @@ class LR{
 				T.push("F");
 				T.push("3");
 			}
-			else if (input == "6T"){
+			// r6 state T -> F |F| = 1, pop 2*1 items
+			else if (token == "3)"){
+				T.push("3");
+				pop();
+				pop();
+				input = "T";
+				pop();
+				tokenize();
+				g();
+			}
+			else if (token == "6T"){
 				T.push("6");
 				T.push("T");
-				T.push("11");
+				T.push("11");	
 			}
 			// r1 state E -> E + T |E+T|=3, pop 2*3 items
-			else if (input == "11J"){
+			else if (token == "11J"){
 				T.push("11");
 				pop();
 				pop();
@@ -149,20 +171,20 @@ class LR{
 				tokenize();
 				g();
 			}
-			else if (input == "4E"){
+			else if (token == "4E"){
 				T.push("4");
 				T.push("E");
 				T.push("10");
 			}
 			// s15 state
-			else if (input == "10)"){
+			else if (token == "10)"){
 				T.push("10");
 				T.push(")");
 				T.push("15");
 				counter++;
 			}
 			// c7 F -> (E) |(E)|= 3, pop 2*3 items
-			else if (input == "15/"){
+			else if (token == "15/"){
 				T.push("15");
 				pop();
 				pop();
@@ -176,13 +198,13 @@ class LR{
 				g();
 				
 			}
-			else if (input == "0F"){
+			else if (token == "0F"){
 				T.push("0");
 				T.push("F");
 				T.push("3");
 			}
 			// r6 state T -> F |F| = 1, pop 2*1 items
-			else if (input == "3/"){
+			else if (token == "3/"){
 				T.push("3");
 				pop();
 				pop();
@@ -191,26 +213,26 @@ class LR{
 				tokenize();
 				g();
 			}
-			else if (input == "0T"){
+			else if (token == "0T"){
 				T.push("0");
 				T.push("T");
 				T.push("2");
 			}
-			else if (input == "2/"){
+			else if (token == "2/"){
 				T.push("2");
 				T.push("/");
 				T.push("9");
 				counter++;
 			}
 			// s5 state
-			else if (input == "9i"){
+			else if (token == "9i"){
 				T.push("9");
 				T.push("i");
 				T.push("5");
 				counter++;
 			}
 			// r8 state F -> i |i|=1, pop 2*1 items
-			else if (input == "5$"){
+			else if (token == "5$"){
 				T.push("5");
 				pop();
 				pop();
@@ -219,13 +241,13 @@ class LR{
 				tokenize();
 				g();
 			}
-			else if (input == "9F"){
+			else if (token == "9F"){
 				T.push("9");
 				T.push("F");
 				T.push("14");
 			}
 			// r5 state T -> T/F |T/F|=3, pop 2*3 items
-			else if (input == "14$"){
+			else if (token == "14$"){
 				T.push("14");
 				pop();
 				pop();
@@ -239,7 +261,7 @@ class LR{
 				g();
 			}
 			// r3 state E -> T |T| = 1, pop 2*1 items
-			else if (input == "2$"){
+			else if (token == "2$"){
 				T.push("2");
 				pop();
 				pop();
@@ -248,13 +270,10 @@ class LR{
 				tokenize();
 				g();
 			}
-			else if (input = "0E"){
+			else if (token == "0E"){
 				T.push("0");
 				T.push("E");
 				T.push("1");
-			}
-			else{
-				//
 			}
 		}
 		
