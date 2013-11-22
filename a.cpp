@@ -1,3 +1,11 @@
+// =========================================================================
+// Computer Science 323 - Section 5
+// Assignment No 8
+// Date: 11/21/13
+// Programmers: Samar Alqayidi, Harry Mora
+// LR Parser    
+// =========================================================================
+
 #include <iostream>
 #include <string>
 #include <stack>
@@ -6,7 +14,6 @@ using namespace std;
 
 class LR{
 	private:
-		string table[15][11] = { {} };
 		stack <string> T;
 		string expression;
 		string input;
@@ -22,6 +29,10 @@ class LR{
 		}
 		void parse(){
 			T.push("0");
+			cout << "==============================" << endl;
+			cout << "Expression to parse:" << endl;
+			cout << expression << endl;
+			cout << "==============================" << endl;
 			
 			while(!T.empty()){
 				if(temp == "1"){
@@ -39,7 +50,8 @@ class LR{
 		void pop(){
 			temp = T.top();
 			T.pop();
-			cout << temp << endl;
+			// output top of stack (for tracing)
+			//cout << temp << endl;
 		}
 		void tokenize(){
 			n = temp.length();
@@ -51,7 +63,8 @@ class LR{
 			else{
 				token = token.insert(2,input);
 
-			}	
+			}
+			// output tokens during testing and debugging	
 			cout << token << endl;
 		}
 		void g(){
@@ -284,3 +297,46 @@ int main(){
 	A.parse();
 	return(0);
 }
+
+/* 
+
+OUTPUT:
+
+==============================
+Expression to parse:
+(i+i)/i$
+==============================
+0(
+4i
+5+
+4F
+3+
+4T
+2+
+4E
+10+
+6i
+5)
+6F
+3)
+6T
+11)
+T)
+6)
+10)
+15/
+0F
+3/
+0T
+2/
+9i
+5$
+9F
+14$
+0T
+2$
+0E
+1$
+Accept
+
+*/
